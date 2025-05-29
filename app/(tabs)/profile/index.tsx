@@ -9,12 +9,17 @@ import { useRouter } from 'expo-router';
 import { useAuthStore } from '@/stores/authStore';
 import { useUserStore } from '@/stores/userStore';
 import { useEarningsStore } from '@/stores/earningsStore';
+import ComingSoonModal from '@/components/ui/ComingSoonModal';
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { user, profile, isLoading, signOut, loadUserProfile } = useAuthStore();
   const { accountType, isPremium } = useUserStore();
   const { currentBalance, totalEarned, transactions, syncWithSupabase } = useEarningsStore();
+  
+  // State for coming soon modal
+  const [showComingSoonModal, setShowComingSoonModal] = useState(false);
+  const [comingSoonFeature, setComingSoonFeature] = useState('');
   
   useEffect(() => {
     if (user) {
@@ -33,24 +38,34 @@ export default function ProfileScreen() {
     router.push('../membership');
   };
 
+  // These navigation functions now show the coming soon modal instead
   const navigateToHelp = () => {
-    router.push('./help');
+    showFeatureComingSoon('Help & Support');
   };
 
   const navigateToAbout = () => {
-    router.push('./about');
+    showFeatureComingSoon('About SurveyPay');
   };
 
   const navigateToReferral = () => {
-    router.push('./referral');
+    showFeatureComingSoon('Refer & Earn');
   };
 
   const navigateToAchievements = () => {
-    router.push('./achievements');
+    showFeatureComingSoon('Achievements');
+  };
+  
+  const navigateToPaymentMethods = () => {
+    showFeatureComingSoon('Payment Methods');
+  };
+  
+  const showLanguageOptions = () => {
+    showFeatureComingSoon('Language Settings');
   };
 
-  const navigateToPaymentMethods = () => {
-    router.push('./payment-methods');
+  const showFeatureComingSoon = (featureName: string) => {
+    setComingSoonFeature(featureName);
+    setShowComingSoonModal(true);
   };
 
   const handleLogout = async () => {
@@ -241,7 +256,10 @@ export default function ProfileScreen() {
             
             <View style={styles.menuDivider} />
             
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={showLanguageOptions}
+            >
               <View style={styles.menuItemLeft}>
                 <View style={[styles.menuIconContainer, { backgroundColor: Colors.light.primary + '20' }]}>
                   <Globe size={18} color={Colors.light.primary} />
@@ -266,6 +284,13 @@ export default function ProfileScreen() {
         
         <Text style={styles.versionText}>Version 1.0.0</Text>
       </ScrollView>
+      
+      {/* Coming Soon Modal */}
+      <ComingSoonModal
+        visible={showComingSoonModal}
+        onClose={() => setShowComingSoonModal(false)}
+        featureName={comingSoonFeature}
+      />
     </View>
   );
 }
