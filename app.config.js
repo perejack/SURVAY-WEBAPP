@@ -17,6 +17,8 @@ module.exports = {
       output: "static",
       // Add a custom splash screen for web
       favicon: "./assets/images/applogo.png",
+      // Ensure proper asset paths in production
+      publicPath: "/",
     },
     // Make sure the expo-router plugin is available
     plugins: [

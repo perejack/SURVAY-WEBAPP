@@ -7,6 +7,7 @@ module.exports = async function(env, argv) {
       ...env,
       babel: {
         dangerouslyAddModulePathsToTranspile: [
+          '@ui-kitten/components',
           '@react-native-async-storage/async-storage'
         ]
       }
@@ -14,6 +15,19 @@ module.exports = async function(env, argv) {
     argv
   );
   
+  // Add polyfills for AsyncStorage and other modules
+  config.resolve.alias = {
+    ...config.resolve.alias,
+    'react-native$': 'react-native-web',
+    'react-native-get-random-values': 'get-random-values',
+    crypto: require.resolve('crypto-browserify'),
+  };
+
+  // Fix public path for deployed assets
+  if (env.mode === 'production') {
+    config.output.publicPath = '/';
+  }
+
   // Add fallbacks for browser polyfills
   config.resolve.fallback = {
     ...config.resolve.fallback,
