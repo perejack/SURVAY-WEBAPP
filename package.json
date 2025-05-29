@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "expo start",
     "web": "expo start --web --config web-build-config.js",
+    "build": "expo export --platform web --config app.config.js",
     "build:web": "expo export --platform web --config app.config.js",
+    "vercel-build": "expo export --platform web --config app.config.js && npx serve -s web-build",
     "lint": "expo lint"
   },
   "dependencies": {
