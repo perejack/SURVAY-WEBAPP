@@ -369,6 +369,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontSize: 16,
     color: Colors.light.text,
+    paddingLeft: 5, // Add padding to prevent first letter from hiding
   },
   passwordToggle: {
     padding: Layout.spacing.xs,
